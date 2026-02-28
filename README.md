@@ -3,7 +3,7 @@
 
 Do this step by step:
 
-1. Need brew and python3 íntalled and then `brew install git-lfs` to install git large files
+1. Need brew and python3 installed and then `brew install git-lfs` to install git large files
 2. Disable SIP, set amfi_get_out_of_my_way=1
 3. Download or clone full this repo (it might take a while, for me 12GB takes me 20 minutes to finish)
 4. Run the `vphone-aio.sh` script
