@@ -100,7 +100,7 @@ if [ ! -d "$PROJECT" ]; then
         echo "[2/5] Extracting vphone-cli.tar.zst ..."
     fi
 
-    tar --use-compress-program=zstd -xf "$ARCHIVE" -C "$SCRIPT_DIR"
+    zstd -dc "$ARCHIVE" | tar xf - -C "$SCRIPT_DIR"
     echo "       Done."
 
     # Clean up the merged archive to save disk space
