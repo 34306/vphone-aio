@@ -88,16 +88,16 @@ if [ ! -d "$PROJECT" ]; then
             exit 1
         fi
 
-        echo "[1/5] Merging ${#PARTS[@]} split parts into vphone-cli.tar.zst ..."
+        echo "[1/4] Merging ${#PARTS[@]} split parts into vphone-cli.tar.zst ..."
         cat "$SCRIPT_DIR"/vphone-cli.tar.zst.part_* > "$ARCHIVE"
         echo "       Done. ($(du -h "$ARCHIVE" | cut -f1))"
         echo ""
 
-        echo "[2/5] Extracting vphone-cli.tar.zst ..."
+        echo "[2/4] Extracting vphone-cli.tar.zst ..."
     else
-        echo "[1/5] vphone-cli.tar.zst already exists, skipping merge."
+        echo "[1/4] vphone-cli.tar.zst already exists, skipping merge."
         echo ""
-        echo "[2/5] Extracting vphone-cli.tar.zst ..."
+        echo "[2/4] Extracting vphone-cli.tar.zst ..."
     fi
 
     zstd -dc "$ARCHIVE" | tar xf - -C "$SCRIPT_DIR"
@@ -107,55 +107,13 @@ if [ ! -d "$PROJECT" ]; then
     rm -f "$ARCHIVE"
     echo "       Cleaned up archive to save space."
 else
-    echo "[1/5] vphone-cli/ already exists, skipping merge & extraction."
+    echo "[1/4] vphone-cli/ already exists, skipping merge & extraction."
 fi
 
 echo ""
-
-# ── Build & Boot VM ──────────────────────────────────────────────
-echo "[3/5] Building and booting the VM ..."
-echo ""
-
-cd "$PROJECT"
-./boot.sh &
-BOOT_PID=$!
-
-# ── Wait for VM to become reachable ──────────────────────────────
-echo ""
-echo "[4/5] Waiting for VM to boot (up to 3 minutes) ..."
-
-MAX_WAIT=180
-ELAPSED=0
-READY=false
-
-while [ $ELAPSED -lt $MAX_WAIT ]; do
-    if ! kill -0 "$BOOT_PID" 2>/dev/null; then
-        echo ""
-        echo "ERROR: VM process exited unexpectedly."
-        exit 1
-    fi
-
-    if nc -z -w2 192.168.65.32 22222 2>/dev/null; then
-        READY=true
-        break
-    fi
-
-    sleep 5
-    ELAPSED=$((ELAPSED + 5))
-    printf "\r       Waiting... %ds / %ds" "$ELAPSED" "$MAX_WAIT"
-done
-
-echo ""
-
-if [ "$READY" = true ]; then
-    echo "       VM is up!"
-else
-    echo "       WARNING: Timed out, starting tunnels anyway."
-fi
 
 # ── Start iproxy tunnels ─────────────────────────────────────────
-echo ""
-echo "[5/5] Starting iproxy tunnels ..."
+echo "[3/4] Starting iproxy tunnels ..."
 
 iproxy 22222 22222 >/dev/null 2>&1 &
 IPROXY_SSH_PID=$!
@@ -165,11 +123,11 @@ iproxy 5901 5901 >/dev/null 2>&1 &
 IPROXY_VNC_PID=$!
 echo "       VNC : localhost:5901  -> device:5901"
 
-# ── All done ─────────────────────────────────────────────────────
+# ── Build & Boot VM ──────────────────────────────────────────────
+echo ""
+echo "[4/4] Building and booting the VM ..."
 echo ""
 echo "=========================================="
-echo ""
-echo "  vPhone is READY!"
 echo ""
 echo "  Connect via VNC : vnc://127.0.0.1:5901"
 echo "  Connect via SSH : ssh -p 22222 root@127.0.0.1"
@@ -177,5 +135,7 @@ echo ""
 echo "  Press Ctrl+C to stop everything."
 echo ""
 echo "=========================================="
+echo ""
 
-wait "$BOOT_PID" 2>/dev/null || true
+cd "$PROJECT"
+./boot.sh
