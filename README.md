@@ -13,6 +13,8 @@ Do this step by step:
 8. Connect VNC (using RealVNC or Screen sharing): `vnc://127.0.0.1:5901`
 9. Enjoy!
 
+# Preview
+![](preview.png)
 
 # Credits
 - [wh1te4ver (Hyungyu Seo)](https://github.com/wh1te4ever) for a super details and writeup: https://github.com/wh1te4ever/super-tart-vphone-writeup
