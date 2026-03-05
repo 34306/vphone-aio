@@ -1,31 +1,127 @@
 # vphone-aio
-1 script run the vphone (iOS 26.1), already jailbroken with full bootstrap installed
 
-Do this step by step:
+A script that runs **vPhone (iOS 26.1)**. The image is already **jailbroken with full bootstrap installed**.
 
-1. Install prerequisites:
-   ```bash
-   brew install git-lfs wget zstd libimobiledevice
-   ```
-2. Disable SIP, set `amfi_get_out_of_my_way=1`
-3. Download or clone this repo (it might take a while, for me 12GB takes me 20 minutes to finish)
-4. If any split parts are missing, the script will auto-download them. You can also manually download them:
-   ```bash
-   for p in aa ab ac ad ae af ag; do
-     wget -O "vphone-cli.tar.zst.part_${p}" \
-       "https://github.com/34306/vphone-aio/raw/refs/heads/main/vphone-cli.tar.zst.part_${p}?download="
-   done
-   ```
-5. Run the `vphone-aio.sh` script
-6. Make sure your device has more than 128GB free (recommended)
-7. Wait until it merges. When done, it will extract the whole folder (about 15 minutes)
-8. You can remove `.git` and the split files once the merge is done
-9. Connect VNC (using RealVNC or Screen Sharing): `vnc://127.0.0.1:5901`
-10. Enjoy!
+---
 
-## SHA-256 Checksums
+## Setup Guide
 
-To verify your downloaded files are not corrupted:
+Follow the steps below.
+
+### 1. Install prerequisites
+
+```bash
+brew install git-lfs wget zstd libimobiledevice
+````
+
+---
+
+### 2. Disable SIP and enable research guests
+
+Boot into **Recovery Mode** (hold the power button → Options → Continue).
+
+Open **Terminal** and run:
+
+```bash
+csrutil disable
+csrutil allow-research-guests enable
+```
+
+Restart back into macOS.
+
+---
+
+### 3. Set boot arguments
+
+After booting into macOS, run:
+
+```bash
+sudo nvram boot-args="amfi_get_out_of_my_way=1 -v"
+```
+
+---
+
+### 4. Clone or download this repository
+
+This repository is large (~12GB).
+Download time may vary (for example, about 20 minutes on a fast connection).
+
+```bash
+git clone https://github.com/34306/vphone-aio.git
+cd vphone-aio
+```
+
+---
+
+### 5. Download missing split parts (optional)
+
+If any parts are missing, the script will automatically download them.
+You can also download them manually:
+
+```bash
+for p in aa ab ac ad ae af ag; do
+  wget -O "vphone-cli.tar.zst.part_${p}" \
+  "https://github.com/34306/vphone-aio/raw/refs/heads/main/vphone-cli.tar.zst.part_${p}?download="
+done
+```
+
+---
+
+### 6. Run the script
+
+```bash
+bash vphone-aio.sh
+```
+
+---
+
+### 7. Storage requirement
+
+Make sure your system has **at least 128GB of free disk space** (recommended).
+
+---
+
+### 8. Extraction process
+
+The script will:
+
+1. Merge the split archive files
+2. Extract the full archive
+
+Extraction takes approximately **15 minutes**.
+
+---
+
+### 9. Optional cleanup
+
+After the merge and extraction are complete, you can remove unnecessary files:
+
+```bash
+rm -rf .git
+rm vphone-cli.tar.zst.part_*
+```
+
+---
+
+### 10. Connect via VNC
+
+Use **RealVNC** or **macOS Screen Sharing** and connect to:
+
+```
+vnc://127.0.0.1:5901
+```
+
+---
+
+### 11. Enjoy 🎉
+
+vPhone should now be running.
+
+---
+
+# SHA-256 Checksums
+
+Use the following checksums to verify the downloaded files are not corrupted.
 
 ```
 3c966247deae3fff51a640f6204e0fafc14fd5c76353ba8f28f20f7d1d29e693  vphone-cli.tar.zst.part_aa
@@ -37,15 +133,28 @@ efdca69df80386b0aa7af8ac260d9ac576ed1f258429fd4ac21b5bbb87cd78fe  vphone-cli.tar
 8bd1551511eb016325918c2d93519829be04feb54727612e74c32e4299670a88  vphone-cli.tar.zst.part_ag
 ```
 
-You can verify manually with:
+Verify using:
+
 ```bash
 shasum -a 256 vphone-cli.tar.zst.part_a*
 ```
 
+---
+
 # Preview
-![](preview.png)
+
+![Preview](preview.png)
+
+---
 
 # Credits
-- [wh1te4ver (Hyungyu Seo)](https://github.com/wh1te4ever) for a super details and writeup: https://github.com/wh1te4ever/super-tart-vphone-writeup
 
-- [Lakr233](https://github.com/Lakr233) for [non-tart repo vphone (vphone-cli)](https://github.com/Lakr233/vphone-cli)
+* **wh1te4ever (Hyungyu Seo)**
+  [https://github.com/wh1te4ever](https://github.com/wh1te4ever)
+  Super detailed write-up:
+  [https://github.com/wh1te4ever/super-tart-vphone-writeup](https://github.com/wh1te4ever/super-tart-vphone-writeup)
+
+* **Lakr233**
+  [https://github.com/Lakr233](https://github.com/Lakr233)
+  Non-Tart vPhone repository:
+  [https://github.com/Lakr233/vphone-cli](https://github.com/Lakr233/vphone-cli)
