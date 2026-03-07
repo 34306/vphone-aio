@@ -34,9 +34,10 @@ BOOT_SH="$PROJECT_DIR/boot.sh"
 if [ -f "$BOOT_SH" ] && ! grep -q -- '--vnc-experimental' "$BOOT_SH"; then
   awk '
     {
-      print $0
       if ($0 ~ /--no-graphics/) {
         print "    --vnc-experimental \\"
+      } else {
+        print $0
       }
     }
   ' "$BOOT_SH" > "$BOOT_SH.tmp"
