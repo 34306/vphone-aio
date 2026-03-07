@@ -18,6 +18,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ARCHIVE="$SCRIPT_DIR/vphone-cli.tar.zst"
 PROJECT="$SCRIPT_DIR/vphone-cli"
+VNC_EXPERIMENTAL="${VPHONE_VNC_EXPERIMENTAL:-0}"
 
 BOOT_PID=""
 IPROXY_SSH_PID=""
@@ -145,6 +146,12 @@ if [ ! -d "$PROJECT" ]; then
     echo "       Cleaned up archive and split parts to save space."
 else
     echo "[1/4] vphone-cli/ already exists, skipping merge & extraction."
+fi
+
+if [ "$VNC_EXPERIMENTAL" = "1" ]; then
+    echo "[2/4] Enabling experimental VNC mode ..."
+    "$SCRIPT_DIR/experimental-vnc/enable.sh" "$PROJECT"
+    echo ""
 fi
 
 echo ""
