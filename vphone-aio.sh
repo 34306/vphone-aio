@@ -166,9 +166,13 @@ iproxy 22222 22222 >/dev/null 2>&1 &
 IPROXY_SSH_PID=$!
 echo "       SSH : localhost:22222 -> device:22222"
 
-iproxy 5901 5901 >/dev/null 2>&1 &
-IPROXY_VNC_PID=$!
-echo "       VNC : localhost:5901  -> device:5901"
+if [ "$VNC_EXPERIMENTAL" = "1" ]; then
+    echo "       VNC : experimental mode enabled (skip iproxy 5901)"
+else
+    iproxy 5901 5901 >/dev/null 2>&1 &
+    IPROXY_VNC_PID=$!
+    echo "       VNC : localhost:5901  -> device:5901"
+fi
 
 # ── Build & Boot VM ──────────────────────────────────────────────
 echo ""
