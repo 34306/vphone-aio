@@ -82,9 +82,9 @@ void VPhoneSendMultiTouchEvents(id multiTouchDevice, NSArray *events);
 
 // --- VNC (experimental, Virtualization.framework built-in) ---
 
-/// Create and start a _VZVNCServer bound to a random port (port:0).
+/// Create and start a _VZVNCServer bound to the given port.
 /// Returns the server object (opaque AnyObject for Swift), or nil on failure.
-id _Nullable VPhoneCreateVNCServer(VZVirtualMachine *virtualMachine, NSString *password);
+id _Nullable VPhoneCreateVNCServer(VZVirtualMachine *virtualMachine, NSString *password, uint16_t port);
 
 /// Return the current port the VNC server is listening on.
 /// Returns 0 if not yet assigned.

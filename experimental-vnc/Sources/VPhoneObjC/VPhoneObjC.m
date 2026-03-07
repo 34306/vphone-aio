@@ -268,7 +268,7 @@ void VPhoneSendMultiTouchEvents(id multiTouchDevice, NSArray *events) {
   send(multiTouchDevice, sel, events);
 }
 
-id VPhoneCreateVNCServer(VZVirtualMachine *virtualMachine, NSString *password) {
+id VPhoneCreateVNCServer(VZVirtualMachine *virtualMachine, NSString *password, uint16_t port) {
   Class secClass = NSClassFromString(@"_VZVNCAuthenticationSecurityConfiguration");
   if (!secClass) {
     NSLog(@"[vphone] WARNING: _VZVNCAuthenticationSecurityConfiguration not found");
@@ -294,7 +294,7 @@ id VPhoneCreateVNCServer(VZVirtualMachine *virtualMachine, NSString *password) {
   id (*initVNC)(id, SEL, NSInteger, dispatch_queue_t, id) =
       (id (*)(id, SEL, NSInteger, dispatch_queue_t, id))objc_msgSend;
   id server = initVNC([serverClass alloc], initSel,
-                      (NSInteger)0,
+                      (NSInteger)port,
                       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                       secConfig);
   if (!server) {

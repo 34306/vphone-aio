@@ -150,6 +150,9 @@ fi
 
 if [ "$VNC_EXPERIMENTAL" = "1" ]; then
     echo "[2/4] Enabling experimental VNC mode ..."
+    export VPHONE_VNC_PORT="${VPHONE_VNC_PORT:-5901}"
+    export VPHONE_VNC_PASSWORD="${VPHONE_VNC_PASSWORD:-alpine}"
+    echo "       Experimental VNC defaults: port=${VPHONE_VNC_PORT}, password=${VPHONE_VNC_PASSWORD}"
     "$SCRIPT_DIR/experimental-vnc/enable.sh" "$PROJECT"
     echo ""
 fi

@@ -6,12 +6,14 @@ import Virtualization
 class VPhoneVNC {
     private let vncServer: AnyObject
     let password: String
+    let port: UInt16
 
     init(virtualMachine: VZVirtualMachine) throws {
-        let words = ["apple", "swift", "phone", "vnc", "boot", "tart", "mac", "arm"]
-        password = (0..<4).map { _ in words[Int.random(in: 0..<words.count)] }.joined(separator: "-")
+        let env = ProcessInfo.processInfo.environment
+        password = env["VPHONE_VNC_PASSWORD"] ?? "alpine"
+        port = UInt16(env["VPHONE_VNC_PORT"] ?? "") ?? 5901
 
-        guard let server = VPhoneCreateVNCServer(virtualMachine, password) as AnyObject? else {
+        guard let server = VPhoneCreateVNCServer(virtualMachine, password, port) as AnyObject? else {
             throw VPhoneVNCError.serverCreationFailed
         }
         vncServer = server
