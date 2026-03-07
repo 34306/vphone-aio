@@ -23,6 +23,21 @@ Do this step by step:
 9. Connect VNC (using RealVNC or Screen Sharing): `vnc://127.0.0.1:5901`
 10. Enjoy!
 
+### Experimental VNC mode (faster input / hotkeys)
+
+If default VNC feels laggy, enable the experimental Virtualization.framework VNC path:
+
+```bash
+VPHONE_VNC_EXPERIMENTAL=1 ./vphone-aio.sh
+```
+
+When enabled, startup logs will print a random VNC URL and password, for example:
+
+```text
+[vphone] VNC password : swift-mac-arm-vnc
+[vphone] VNC URL      : vnc://:swift-mac-arm-vnc@127.0.0.1:57739
+```
+
 ## SHA-256 Checksums
 
 To verify your downloaded files are not corrupted:
