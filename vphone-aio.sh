@@ -89,7 +89,7 @@ download_missing_parts() {
 
     if $need_download; then
         command -v wget >/dev/null 2>&1 || {
-            echo "ERROR: wget not found. Install with: brew install wget"
+            echo "ERROR: wget not found. Install with: brew install wget"; exit 1
             exit 1
         }
 
