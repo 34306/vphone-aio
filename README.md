@@ -26,6 +26,35 @@ Do this step by step:
 9. Connect VNC (using RealVNC or Screen Sharing): `vnc://127.0.0.1:5901`
 10. Enjoy!
 
+### Experimental VNC mode (faster input / hotkeys)
+
+If default VNC feels laggy, enable the experimental Virtualization.framework VNC path:
+
+```bash
+VPHONE_VNC_EXPERIMENTAL=1 ./vphone-aio.sh
+```
+
+When enabled, startup logs will print VNC URL/password.
+Default values in experimental mode:
+- Port: `5901`
+- Password: `alpine`
+
+You can override defaults:
+
+```bash
+VPHONE_VNC_EXPERIMENTAL=1 \
+VPHONE_VNC_PORT=5901 \
+VPHONE_VNC_PASSWORD=alpine \
+./vphone-aio.sh
+```
+
+Example output:
+
+```text
+[vphone] VNC password : alpine
+[vphone] VNC URL      : vnc://:alpine@127.0.0.1:5901
+```
+
 ## SHA-256 Checksums
 
 To verify your downloaded files are not corrupted:

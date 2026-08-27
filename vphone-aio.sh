@@ -18,6 +18,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ARCHIVE="$SCRIPT_DIR/vphone-cli.tar.zst"
 PROJECT="$SCRIPT_DIR/vphone-cli"
+VNC_EXPERIMENTAL="${VPHONE_VNC_EXPERIMENTAL:-0}"
 
 BOOT_PID=""
 IPROXY_SSH_PID=""
@@ -147,6 +148,15 @@ else
     echo "[1/4] vphone-cli/ already exists, skipping merge & extraction."
 fi
 
+if [ "$VNC_EXPERIMENTAL" = "1" ]; then
+    echo "[2/4] Enabling experimental VNC mode ..."
+    export VPHONE_VNC_PORT="${VPHONE_VNC_PORT:-5901}"
+    export VPHONE_VNC_PASSWORD="${VPHONE_VNC_PASSWORD:-alpine}"
+    echo "       Experimental VNC defaults: port=${VPHONE_VNC_PORT}, password=${VPHONE_VNC_PASSWORD}"
+    "$SCRIPT_DIR/experimental-vnc/enable.sh" "$PROJECT"
+    echo ""
+fi
+
 echo ""
 
 # ── Start iproxy tunnels ─────────────────────────────────────────
@@ -156,9 +166,13 @@ iproxy 22222 22222 >/dev/null 2>&1 &
 IPROXY_SSH_PID=$!
 echo "       SSH : localhost:22222 -> device:22222"
 
-iproxy 5901 5901 >/dev/null 2>&1 &
-IPROXY_VNC_PID=$!
-echo "       VNC : localhost:5901  -> device:5901"
+if [ "$VNC_EXPERIMENTAL" = "1" ]; then
+    echo "       VNC : experimental mode enabled (skip iproxy 5901)"
+else
+    iproxy 5901 5901 >/dev/null 2>&1 &
+    IPROXY_VNC_PID=$!
+    echo "       VNC : localhost:5901  -> device:5901"
+fi
 
 # ── Build & Boot VM ──────────────────────────────────────────────
 echo ""
